@@ -25,17 +25,26 @@ public class MQService {
 	private JmsTemplate jmsTemplate;
 
 	public String sendHelloWorld() {
-		
+
 		final Logger LOG = LoggerFactory.getLogger(MQService.class);
 
 		try {
 			String helloWorld = "Hello World!";
 			jmsTemplate.convertAndSend(queueName, helloWorld);
-			LOG.debug("Successfully Sent message: {} to the queue", helloWorld);
+			LOG.debug("Successfully Sent message: {} to the queue " + queueName, helloWorld);
 			return helloWorld;
 		} catch (JmsException ex) {
-			throw new AppException("MQAPP001", "Error sending message to the queue.", ex);
+			throw new AppException("MQAPP001", "Error sending message to the queue " + queueName, ex);
 		}
+	}
+	
+	public void setQueueName(String newQueueName) {
+		this.queueName = newQueueName;
+		return;
+	}
+
+	public String getQueueName() {
+			return this.queueName;
 	}
 	
 	public String receiveMessage() {
